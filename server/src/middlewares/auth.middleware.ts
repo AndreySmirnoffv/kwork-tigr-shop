@@ -16,15 +16,13 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     if (!accessToken) {
       return res.status(401).json({ message: 'Access token не предоставлен' });
     }
-  
-    console.log('Received access token:', accessToken);
-  
+    
     try {
       const decoded = jwt.verify(accessToken, tokenConfig.access.secret);
       (req as any).user = decoded;
       return next();
     } catch (error: any) {
-      console.error('Error verifying access token:', error); // Логируем ошибку
+
       if (error.name !== 'TokenExpiredError') {
         return res.status(403).json({ message: 'Неверный access token' });
       }
