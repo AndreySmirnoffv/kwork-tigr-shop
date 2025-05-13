@@ -1,4 +1,4 @@
-import { TypeUser } from '#types/TypeUser';
+import { TypeUser } from '#types/type.user';
 import { createOrUpdateUser, findUserByEmailOrPhone } from '@models/user.model';
 import { comparePassword, hashPassword } from '@utils/bcrypt';
 import { generateAuthTokens, setAuthCookies } from '@utils/jwt';

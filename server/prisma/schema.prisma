@@ -20,3 +20,12 @@ model User{
   phone String @unique
   balance BigInt @default(0)
 }
+
+model Payments{
+  id BigInt @id @default(autoincrement())
+  paymentId String @unique
+  value String
+  isPaid Boolean
+  createdAt DateTime
+  status String
+}

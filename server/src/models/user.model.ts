@@ -1,4 +1,4 @@
-import { TypeUser } from "#types/TypeUser";
+import { TypeUser } from "#types/type.user";
 import { prisma } from "@services/prisma.service";
 
 
