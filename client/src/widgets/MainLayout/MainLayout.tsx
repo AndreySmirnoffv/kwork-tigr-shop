@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "../header/Header";
 import { Footer } from "../footer/Footer";
+import s from "./MainLayout.module.scss";
 
-
-export function MainLayout(){
-    return (
-        <>
-            <Header/>
-            <main style={{ padding: "20px" }}>
-                <Outlet/>
-            </main>
-            <Footer/>
-        </>
-    )
+export const MainLayout = () => {
+  return (
+    <div className={s.wrapper}>
+      <Header />
+      
+      <main className={s.content}>
+        <Outlet />
+      </main>
+      
+      <Footer />
+    </div>
+  )
 }

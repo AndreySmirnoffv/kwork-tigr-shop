@@ -1,50 +1,52 @@
+@use '../../styles/variables' as v;
+
 .header {
-  padding: 15px;
-  background: #f8f8f8;
-  border-bottom: 1px solid #ddd;
+  margin: 30px auto;
+  width: 90%;
 }
 
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
+  margin: 20px;
 }
 
 .logo {
-  flex: 1;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  display: inline-block;
 }
 
 .main {
   display: flex;
-  gap: 15px;
   align-items: center;
+  gap: 70px;
+  margin: 0 auto;
+  padding: 0;
+  transition: .5s;
+
+  li {
+    list-style: none;
+  }
+
+  a {
+    font-family: v.$font-primary;
+    font-weight: v.$font-weight-regular;
+    text-decoration: none;
+    color: #0B0B0D;
+    font-weight: 500;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
 }
 
-.main a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  padding: 5px;
-}
 
-.main a:hover {
-  color: #007bff;
-}
 
 .buttons {
   display: flex;
   gap: 15px;
 }
 
-/* Бургер */
 .burger {
   display: none;
   flex-direction: column;
@@ -52,14 +54,15 @@
   gap: 5px;
   cursor: pointer;
   z-index: 1001;
+
+  div {
+    width: 25px;
+    height: 3px;
+    background: #333;
+    transition: all 0.3s ease;
+  }
 }
 
-.burger div {
-  width: 25px;
-  height: 3px;
-  background: #333;
-  transition: all 0.3s ease;
-}
 
 .burger.open div:nth-child(1) {
   transform: rotate(45deg) translateY(8px);
@@ -73,7 +76,6 @@
   transform: rotate(-45deg) translateY(-8px);
 }
 
-/* Мобильное меню */
 .mobileMenu {
   display: none;
 }

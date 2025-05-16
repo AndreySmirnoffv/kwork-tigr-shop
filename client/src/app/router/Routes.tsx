@@ -1,20 +1,21 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Register } from '../../pages/auth/register'
-import { Login } from '../../pages/auth/login'
-import { MainLayout } from '../../widgets/MainLayout/MainLayout'
 import { Profile } from '../../pages/profile/ui/Profile'
-import { ProtectedRoute } from '../../components/ui/ProtectedRoute'
+import { ProtectedRoute } from '../../shared/lib/router/ProtectedRoute'
+import { Home } from '../../pages/home/index'
+import { MainLayout } from '../../widgets/MainLayout/MainLayout'
 
 export function AppRoutes(){
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<ProtectedRoute/>}>
-                    <Route path='/' element={<MainLayout/>}/>
-                    <Route path='login' element={<Login/>}/>
-                    <Route path='register' element={<Register/>}/>
-                    <Route path='/profile' element={<Profile/>}/>
-                </Route>
+            <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/profile" element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                } />
+            </Route>
             </Routes>
         </BrowserRouter>
     )
