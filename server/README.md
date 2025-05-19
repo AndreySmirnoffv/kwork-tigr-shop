@@ -1,1 +1,0 @@
-# kwork-tigr-shop
