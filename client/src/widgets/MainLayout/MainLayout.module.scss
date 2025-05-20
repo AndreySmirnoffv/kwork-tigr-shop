@@ -1,0 +1,10 @@
+// MainLayout.module.scss
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Важно! Занимает всю высоту viewport
+}
+
+.content {
+  flex: 1; // Занимает всё доступное пространство
+}
