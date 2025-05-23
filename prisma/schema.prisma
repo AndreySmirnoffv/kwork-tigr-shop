@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        BigInt  @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  phone     String  @unique
+  userId    String  @unique @default(uuid())
+  firstName String?
+  lastName  String?
+}
+
+model Payments {
+  id        BigInt   @id @default(autoincrement())
+  paymentId String   @unique
+  value     String
+  isPaid    Boolean
+  createdAt DateTime
+  status    String
+}
+
+model Product {
+  id     BigInt         @id @default(autoincrement())
+  images ProductImage[]
+}
+
+model ProductImage {
+  id       BigInt @id @default(autoincrement())
+  data     Bytes
+  mimeType String // Например "image/jpeg"
+  product  Product @relation(fields: [productId], references: [id])
+  productId BigInt
+}
