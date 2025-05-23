@@ -17,7 +17,7 @@ export function Footer() {
           <section className={s.section}>
             <div className={`${s.title} ${s.titleSections}`} onClick={() => toggleMenu('sections')}>
               <h2>Разделы</h2>
-          0    <div className={`${s.arrow} ${activeMenu === 'sections' ? s.active : ''}`} />
+              <div className={`${s.arrow} ${activeMenu === 'sections' ? s.active : ''}`} />
             </div>
             <ul className={`${s.list} ${activeMenu === 'sections' ? s.active : ''}`}>
               <li>sale</li>

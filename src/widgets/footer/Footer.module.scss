@@ -11,7 +11,7 @@
   }
 
   .wrapperContent{
-    max-width: 100%;
+    max-width: 90%;
     .title{
       h2{
         font-size: 30px;
@@ -28,7 +28,7 @@
           margin: 0;
           padding: 0;
           text-align: left;
-          width: 100%;     // растягиваем на всю ширину
+          width: 100%;
         }
       }
     display: flex;
@@ -42,6 +42,7 @@
 
     }
     .rightSection{
+      margin-top: 20px;
       .imagesSection{
         display: flex;
         gap: 10px;
@@ -63,6 +64,7 @@
 
 ul{
   margin-top: 10px;
+  
   li{
     font-size: 20px;
   }
@@ -139,6 +141,7 @@ ul{
         box-sizing: border-box;
 
         li {
+          margin-left: 20px;
           padding: 8px 0;
           opacity: 0;
           font-size: 20px;

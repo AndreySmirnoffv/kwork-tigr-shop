@@ -13,13 +13,12 @@ export const AuthModal = ({ onClose }: any) => {
   const [agreeToAds, setAgreeToAds] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Проверка токенов при открытии модалки
   useEffect(() => {
     const checkTokens = async () => {
       try {
-      const response = await axios.get('http://localhost:8000/api/auth/check-tokens', {
-        withCredentials: true,
-      });
+        const response = await axios.get('http://localhost:8000/api/auth/check-tokens', {
+          withCredentials: true,
+        });
 
         console.log('Токены валидны:', response.data);
         if (response.status === 200) {
@@ -58,28 +57,30 @@ export const AuthModal = ({ onClose }: any) => {
       onClose();
       navigate("/profile");
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error message:', error.message);
-        console.error('Axios config:', error.config);
-
-        if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response headers:', error.response.headers);
-          console.error('Response data:', error.response.data);
-        } else if (error.request) {
-          console.error('No response received. Request object:', error.request);
-        } else {
-          console.error('Error setting up request:', error.message);
-        }
-
-        alert('Login failed: ' + error.message);
-      } else {
+      if (!axios.isAxiosError(error)) {
         console.error('Unexpected error:', error);
         alert('Login failed: ' + String(error));
+        return;
       }
+
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+        console.error('Response data:', error.response.data);
+        alert('Login failed: ' + (error.response.data?.message || 'Server error'));
+        return;
+      }
+
+      if (error.request) {
+        console.error('No response received. Request object:', error.request);
+        alert('Login failed: No response from server');
+        return;
+      }
+
+      console.error('Error setting up request:', error.message);
+      alert('Login failed: ' + error.message);
     }
   };
-
 
   const handleRegisterSubmit = async (e: any) => {
     e.preventDefault();
@@ -105,9 +106,10 @@ export const AuthModal = ({ onClose }: any) => {
 
       console.log('Успешная регистрация:', data);
       onClose();
+      navigate('/profile');
     } catch (error: any) {
       console.error('Ошибка регистрации:', error.message || error);
-      alert(error || 'Ошибка регистрации');
+      alert(error.message || 'Ошибка регистрации');
     }
   };
 
@@ -119,10 +121,11 @@ export const AuthModal = ({ onClose }: any) => {
           <h2 className={s.title}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
         </section>
 
-        <form onSubmit={isLogin ? handleLoginSubmit : handleRegisterSubmit}>
+        <form className={s.form} onSubmit={isLogin ? handleLoginSubmit : handleRegisterSubmit}>
           {isLogin ? (
             <label className={s.label}>
               <input
+                className={s.input}
                 type={isEmailMode ? 'email' : 'tel'}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
@@ -134,6 +137,7 @@ export const AuthModal = ({ onClose }: any) => {
             <>
               <label className={s.label}>
                 <input
+                  className={s.input}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -144,6 +148,7 @@ export const AuthModal = ({ onClose }: any) => {
 
               <label className={s.label}>
                 <input
+                  className={s.input}
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -156,6 +161,7 @@ export const AuthModal = ({ onClose }: any) => {
 
           <label className={s.label}>
             <input
+              className={s.input}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -165,18 +171,23 @@ export const AuthModal = ({ onClose }: any) => {
             />
           </label>
 
-          <label className={s.checkboxLabel}>
-            <input
-              type="checkbox"
-              checked={agreeToAds}
-              onChange={() => setAgreeToAds(!agreeToAds)}
-              required
-            />
-            <span>Согласен на обработку персональных данных</span>
-          </label>
-          <span>
-            При регистрации вы даете согласие с нашей политикой конфиденциальности и публичной офертой
-          </span>
+          {!isLogin && (
+            <section className={s.confirmationText}>
+              <label className={s.checkboxLabel}>
+                <input
+                  className={`${s.input} ${s.checkBoxInput}`}
+                  type="checkbox"
+                  checked={agreeToAds}
+                  onChange={() => setAgreeToAds(!agreeToAds)}
+                  required
+                />
+                <span className={s.span}>Согласен на обработку персональных данных</span>
+              </label>
+              <span className={s.span}>
+                При регистрации вы даете согласие с нашей политикой конфиденциальности и публичной офертой
+              </span>
+            </section>
+          )}
 
           <button type="submit" className={s.submitButton}>
             {isLogin ? 'Войти' : 'Зарегистрироваться'}
@@ -199,7 +210,7 @@ export const AuthModal = ({ onClose }: any) => {
                 Зарегистрироваться
               </span>
             ) : (
-              <span onClick={() => handleLoginSubmit()} className={s.switchLink}>
+              <span onClick={() => setIsLogin(true)} className={s.switchLink}>
                 Войти
               </span>
             )}

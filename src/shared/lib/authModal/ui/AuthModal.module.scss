@@ -1,34 +1,36 @@
 @use '../../../../styles/variables' as v;
 
-
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
-  .modalContent {
-    position: relative;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    height: 523px;
-    width: 811px;
-    max-width: 90vw;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+
+  z-index: 999;
+}
+
+.modalContent {
+  width: 821px;
+  height: auto;
+  max-height: 90vh;
+  background: white;
+  border-radius: 10px;
+  padding: 40px 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
 
 .closeButton {
   position: absolute;
@@ -44,6 +46,7 @@
 .titleWrapper{
     margin-right: 5%;
     .title {
+        text-align: center;
         margin-bottom: 20px;
     }
 }
@@ -58,40 +61,45 @@ input:not([type='checkbox']) {
     border: none;
   }
   
-  
-
-  .checkboxLabel {
+  .confirmationText{
     display: flex;
-    margin-bottom: 20px;
-    width: 100%;
+    flex-direction: column;
+    margin-top: 50px;
+    .checkboxLabel {
+      display: flex;
+      margin-bottom: 20px;
+      width: 100%;
 
-    input {
-        font-size: 15px;
-        font-family: v.$font-secondary;
-        color: #000;
-        padding-left: 10px;
-        text-align: left;
-      
-        &::placeholder {
+      .input {
           font-size: 15px;
           font-family: v.$font-secondary;
-          color: #aaa;
+          color: #000;
+          padding-left: 10px;
           text-align: left;
+        
+          &::placeholder {
+            font-size: 15px;
+            font-family: v.$font-secondary;
+            color: #aaa;
+            text-align: left;
+          }
         }
+      .span{
+          font-size: 20px;
+          font-family: v.$font-secondary;
       }
-    span{
-        font-size: 20px;
-        font-family: v.$font-secondary;
     }
   }
+
+  
   
   .switchText {
     text-align: center;
-    margin: 20px auto;
+    margin: 30px auto;
     width: 100%;
   }
 
-  input::placeholder {
+  .input::placeholder {
     color: #999;
     padding-left: 0;
     text-align: left;
@@ -111,19 +119,23 @@ input:not([type='checkbox']) {
 
 .checkboxLabel {
   display: flex;
-  align-items: center;
+  margin: 0 auto;
   gap: 8px;
   font-size: 14px;
   margin-bottom: 15px;
 
-  input[type='checkbox'] {
+  .input[type='checkbox'] {
     width: auto;
     margin: 0;
   }
-  span{
+  .span{
     font-family: v.$font-secondary;
     font-weight: 15px;
     text-align: center;
+  }
+
+  .checKboxInput{
+    margin-left: 200px;
   }
 }
 
@@ -142,16 +154,6 @@ input:not([type='checkbox']) {
     border-radius: 5px;
     cursor: pointer;
   }
-  
-.switchForm {
-    button {
-        background: v.$Night-Color;
-        color: white;
-        border: none;
-        cursor: pointer;
-  }
-}
-
 
 .switchLink {
     font-family: v.$font-secondary;  
