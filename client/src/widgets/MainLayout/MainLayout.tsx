@@ -7,12 +7,12 @@ export const MainLayout = () => {
   return (
     <div className={s.wrapper}>
       <Header />
-      
+
       <main className={s.content}>
         <Outlet />
       </main>
-      
+
       <Footer />
     </div>
-  )
-}
+  );
+};
