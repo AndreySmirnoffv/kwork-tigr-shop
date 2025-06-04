@@ -1,7 +1,7 @@
-import { PaymentType } from "#types/payment";
+import { PaymentType } from "#types/payment.js";
 import { IConfirmationType, ICreatePayment } from "@a2seven/yoo-checkout";
-import { insertPayment, updatePayment } from "@models/payment.model";
-import { checkout } from "@services/payment.service";
+import { insertPayment, updatePayment } from "@models/payment.model.js";
+import { checkout } from "@services/payment.service.js";
 import { Request, Response } from "express";
 import { v7 } from 'uuid'
 

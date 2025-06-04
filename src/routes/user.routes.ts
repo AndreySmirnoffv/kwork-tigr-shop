@@ -1,10 +1,8 @@
-import { authMiddleware } from 'src/middlewares/auth.middleware';
-import { router } from "./router";
-import { getUser, logoutUser } from '@controllers/user.controller';
-import { updateUser } from '@controllers/auth.controller';
+import { authMiddleware } from 'src/middlewares/auth.middleware.js';
+import { getUser, logoutUser } from "@controllers/user.controller.js";
+import { router } from "./router.js";
 
 router.get("/:userId", authMiddleware, getUser)
 router.post("/logout", logoutUser)
-router.put("/:userId", updateUser)
 
 export default router

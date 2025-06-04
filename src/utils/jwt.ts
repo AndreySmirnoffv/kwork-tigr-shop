@@ -27,7 +27,7 @@ export async function generateAuthTokens(payload: { email: string, userId: strin
 export function setAuthCookies(res: Response, tokens: { accessToken: string, refreshToken?: string }) {
   res.cookie("access_token", tokens.accessToken, {
     httpOnly: true,
-    secure: false, 
+    secure: true, 
     sameSite: "strict",
     maxAge: Number(new Date(Date.now() + 15 * 60 * 1000)),
   });
@@ -37,7 +37,7 @@ export function setAuthCookies(res: Response, tokens: { accessToken: string, ref
       httpOnly: true,
       secure: false,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      maxAge: Number(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)),
     });
   }
 }

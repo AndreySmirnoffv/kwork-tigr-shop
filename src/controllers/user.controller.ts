@@ -1,38 +1,69 @@
-import { findUserByUserId } from '@models/user.model';
-import { removeCookie } from '@utils/jwt';
-import { Request, Response } from 'express'
-
+import { TypeUser } from "#types/type.user.js";
+import { createOrUpdateUser, findUserByIdentifier } from "@models/user.model.js";
+import { removeCookie } from "@utils/jwt.js";
+import { Request, Response } from "express";
 
 export async function getUser(req: Request, res: Response): Promise<Response | any> {
     const { userId } = req.params;
 
-    console.log("getUser userId:", userId);
+    if (!userId || typeof userId !== "string") {
+        return res.status(400).json({ error: "Invalid or missing userId" });
+    }
 
     try {
-        const user = await findUserByUserId(userId); // добавлен await
-
+        const user: TypeUser | null = await findUserByIdentifier("userId", userId);
+        console.log(user)
         if (!user) {
-            return res.status(404).json({ message: "Пользователь не найден" });
+            return res.status(404).json({ error: "User not found" });
         }
 
-        return res.status(200).json({
-            message: 'Пользователь успешно получен',
-            user,
-        });
+        return res.json({ user });
     } catch (error) {
-        console.error("Ошибка при получении пользователя:", error);
-        return res.status(500).json({ message: "Ошибка сервера" });
+        console.error("Error fetching user:", error);
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
+export async function updateUser(req: Request, res: Response): Promise<Response | any>{
+    const { data } = req.body
 
-export async function logoutUser(req: Request, res: Response): Promise<Response | any>{
     try {
-        removeCookie(res);
-        return res.status(200).json({ message: 'Пользователь успешно вышел' });
+        await createOrUpdateUser(data)
+
+        return { message: "User updated successfully" }
+
     } catch (error) {
         console.error(error)
-        return res.status(500).json({ message: "Ошибка сервера" });
     }
    
 }
+
+export async function logoutUser(req: Request, res: Response): Promise<Response | any> {
+    try {
+      // Очищаем куки
+      res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: "/"
+      });
+  
+      res.clearCookie("refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict",
+        path: "/"
+      });
+  
+      return res.status(200).json({ 
+        success: true,
+        message: "Успешный выход",
+        clearClientData: true // Флаг для клиента
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        success: false,
+        message: 'Ошибка сервера при выходе' 
+      });
+    }
+  }

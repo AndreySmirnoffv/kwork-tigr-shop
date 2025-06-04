@@ -1,5 +1,5 @@
-import { PaymentType } from "#types/payment";
-import { prisma } from "@services/prisma.service";
+import { PaymentType } from "#types/payment.js";
+import { prisma } from "@services/prisma.service.js";
 
 export async function insertPayment(data: PaymentType){
     return await prisma.payments.create({
