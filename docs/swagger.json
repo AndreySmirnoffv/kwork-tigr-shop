@@ -1,0 +1,374 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Tigr Shop API",
+    "version": "1.0.0",
+    "description": "API для регистрации, входа, проверки токенов, управления пользователями и получения товаров"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api",
+      "description": "Локальный API сервер"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Регистрация нового пользователя",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "phone", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" },
+                  "phone": { "type": "string", "example": "+79998887766" },
+                  "password": { "type": "string", "example": "securePassword123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Пользователь успешно зарегистрирован",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "userId": { "type": "string" }
+                      }
+                    },
+                    "accessToken": { "type": "string" },
+                    "refreshToken": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "409": { "description": "Пользователь уже существует" },
+          "500": { "description": "Ошибка регистрации пользователя" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Авторизация пользователя",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["password"],
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" },
+                  "phone": { "type": "string", "example": "+79998887766" },
+                  "password": { "type": "string", "example": "securePassword123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный вход",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string" },
+                        "phone": { "type": "string" },
+                        "userId": { "type": "string" },
+                        "accessToken": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Email или телефон и пароль обязательны" },
+          "401": { "description": "Неверный пароль или пользователь не найден" },
+          "500": { "description": "Ошибка на сервере" }
+        }
+      }
+    },
+    "/auth/token-check": {
+      "get": {
+        "summary": "Проверка валидности access/refresh токена",
+        "tags": ["Auth"],
+        "security": [
+          { "bearerAuth": [] },
+          { "cookieAuth": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Токен действителен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": { "type": "boolean" },
+                    "message": { "type": "string" },
+                    "canRefresh": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Недействительный или отсутствующий токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": { "type": "boolean" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Выход пользователя и очистка куки",
+        "tags": ["Auth"],
+        "responses": {
+          "200": {
+            "description": "Успешный выход",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Успешный выход" },
+                    "clearClientData": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка сервера при выходе"
+          }
+        }
+      }
+    },
+    "/products/last-products": {
+      "post": {
+        "summary": "Получить последние товары из указанных категорий",
+        "tags": ["Products"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "categories": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "example": ["sneakers", "tshirts"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный ответ с товарами",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sanitized": {
+                      "type": "array",
+                      "items": { "type": "object" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Некорректные данные запроса" },
+          "500": { "description": "Ошибка сервера при получении товаров" }
+        }
+      }
+    },
+    "/products/by-filter": {
+      "get": {
+        "summary": "Получить товары по фильтрам",
+        "tags": ["Products"],
+        "parameters": [
+          { "in": "query", "name": "minPrice", "schema": { "type": "string" }, "description": "Минимальная цена" },
+          { "in": "query", "name": "maxPrice", "schema": { "type": "string" }, "description": "Максимальная цена" },
+          { "in": "query", "name": "brand", "schema": { "type": "string" }, "description": "Бренд товара" },
+          { "in": "query", "name": "name", "schema": { "type": "string" }, "description": "Название товара" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список товаров",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": { "type": "object" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Ошибка сервера при получении товаров" }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Получить товар по ID",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID товара"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Товар найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prodict": { "type": "object" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Товар не найден" },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "summary": "Получить пользователя по userId",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Пользователь найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "type": "object" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Пользователь не найден" },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
+    },
+    "/users/update": {
+      "put": {
+        "summary": "Обновить пользователя",
+        "tags": ["User"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Пользователь обновлён",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken"
+      }
+    }
+  },
+  "tags": [
+    { "name": "Auth", "description": "Маршруты для аутентификации" },
+    { "name": "Products", "description": "Маршруты для получения товаров" },
+    { "name": "User", "description": "Маршруты для работы с пользователями" }
+  ]
+}

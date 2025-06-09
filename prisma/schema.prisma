@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id BigInt @id @default(autoincrement())
+  userId String? @default(uuid())
+  firstName String?
+  lastName String? 
+  email String @unique
+  password String
+  phone String @unique
+  balance BigInt @default(0)
+}
+
+model Payments{
+  id BigInt @id @default(autoincrement())
+  paymentId String @unique
+  value String
+  isPaid Boolean
+  createdAt DateTime
+  status String
+}
+
+model Product {
+  id          BigInt         @id @default(autoincrement())
+  article     String         @unique
+  brand       String
+  title       String
+  category    String
+  gender      String
+  price       BigInt
+  description String
+  isNew       Boolean
+  isHit       Boolean
+  isCollab    Boolean
+  originalTitle String
+  isFirstPhoto Boolean
+  isSecondPhoto Boolean
+  isThirdPhoto Boolean
+  isFourthPhoto Boolean
+  isFifthPhoto Boolean
+  isSixthPhoto Boolean
+  photoName String
+  images      ProductImage[]
+  previewImages ProductPreviewImage[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  data      String
+  mimeType  String
+  product   Product @relation(fields: [productId], references: [id])
+  productId BigInt
+}
+
+model ProductPreviewImage {
+  id        Int     @id @default(autoincrement())
+  data      String
+  mimeType  String
+  product   Product @relation(fields: [productId], references: [id])
+  productId BigInt
+}
