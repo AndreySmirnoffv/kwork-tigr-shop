@@ -40,7 +40,7 @@ JWT_REFRESH_TOKEN=""
 
 ```bash
 npx tsx src/index.ts
-```bash
+```
 
 ##🛠️ Сборка проекта
 
