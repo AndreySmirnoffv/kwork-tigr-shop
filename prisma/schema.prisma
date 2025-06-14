@@ -72,3 +72,12 @@ model ProductPreviewImage {
   product   Product @relation(fields: [productId], references: [id])
   productId BigInt
 }
+
+model CartProduct{
+  id BigInt @id @default(autoincrement())
+  product Product @relation(fields: [productId], references: [id])
+  productId BigInt
+  user User @relation(fields: [userId] references: [id])
+  userId String 
+  amount Bigint
+}

@@ -350,6 +350,113 @@
           "500": { "description": "Ошибка сервера" }
         }
       }
+    },
+    "/cart": {
+      "post": {
+        "summary": "Добавить товар в корзину",
+        "tags": ["Cart"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "productId", "amount"],
+                "properties": {
+                  "userId": { "type": "string", "example": "123" },
+                  "productId": { "type": "string", "example": "456" },
+                  "amount": { "type": "integer", "example": 2 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Товар добавлен в корзину"
+          },
+          "400": { "description": "Ошибка в теле запроса" },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
+    },
+    "/cart/{userId}": {
+      "get": {
+        "summary": "Получить содержимое корзины пользователя",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список товаров в корзине",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
+    },
+    "/cart/{id}": {
+      "delete": {
+        "summary": "Удалить товар из корзины",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Товар удалён из корзины"
+          },
+          "500": { "description": "Ошибка сервера" }
+        }
+      },
+      "put": {
+        "summary": "Обновить количество товара в корзине",
+        "tags": ["Cart"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["amount"],
+                "properties": {
+                  "amount": { "type": "integer", "example": 3 }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Количество обновлено" },
+          "500": { "description": "Ошибка сервера" }
+        }
+      }
     }
   },
   "components": {
@@ -369,6 +476,7 @@
   "tags": [
     { "name": "Auth", "description": "Маршруты для аутентификации" },
     { "name": "Products", "description": "Маршруты для получения товаров" },
-    { "name": "User", "description": "Маршруты для работы с пользователями" }
+    { "name": "User", "description": "Маршруты для работы с пользователями" },
+    { "name": "Cart", "description": "Маршруты для управления корзиной" }
   ]
 }
