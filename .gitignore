@@ -1,0 +1,5 @@
+node_modules
+.env
+prisma/migrations
+images
+tigr-shop-3e56ab3545d6.json
