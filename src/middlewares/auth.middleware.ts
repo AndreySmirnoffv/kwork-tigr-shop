@@ -11,10 +11,12 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   const authHeader = req.headers.authorization;
     const accessToken = authHeader?.startsWith('Bearer ') 
       ? authHeader.split(' ')[1] 
-      : req.cookies.accessToken;
+      : req.cookies.access_token;
 
-    const refreshToken = req.cookies.refreshToken || 
+    const refreshToken = req.cookies.refresh_token || 
                        (req.headers['x-refresh-token'] as string | undefined);
+
+    console.log(authHeader, accessToken, refreshToken, req)
 
     if (!accessToken && !refreshToken) {
       return res.status(401).json({ valid: false, message: 'Токены отсутствуют' });

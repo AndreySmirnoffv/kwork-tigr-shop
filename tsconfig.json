@@ -23,7 +23,7 @@
       "#types/*": ["src/types/*"]
     }
   },
-  "include": ["src/**/*", "src/services/.service.ts"],
+  "include": ["src/**/*", "src/services/.service.ts", "types.d.ts" ],
   "exclude": ["node_modules", "openapi.json"],
   "ts-node": {
     "esm": true

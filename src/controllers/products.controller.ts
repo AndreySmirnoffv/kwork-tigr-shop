@@ -34,9 +34,13 @@ export async function getLastProducts(req: Request, res: Response): Promise<Resp
   try {
     const { categories } = req.body;
 
-    const products = await getProductsModel(categories, 5);
+    const allProducts = await Promise.all(
+      categories.map((category: any) => 
+        getProductsModel([category], 4) 
+      )
+    );
 
-    const sanitized = stringifyBigInt(products);
+    const sanitized = stringifyBigInt(allProducts);
 
     return res.json({ sanitized });
   } catch (error) {
